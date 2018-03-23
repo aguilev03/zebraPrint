@@ -2,19 +2,25 @@
 # which then proceeds to edit the label with the correct values. It will then update the associated txt file
 # with the new last number
 
-# imports os system command, Pyperclip for clipboard, and pyautogui for keyboard macros
+# imports os system command, pyautogui for keyboard macros
 import os
 import pyautogui
 import time
 
-locknum = "E1785000A"
+#locknum check
+locknum = ["E1785000A","E1785001A","E1785501A"]
 printAmt = 1000
+#lock number request
+lockReq = input("Please type in the model number")
+
+
+
 
 def addCB(text) :
     command = 'echo ' + text.strip() +'| clip'
     os.system(command)
 
-# opens label program
+# opens label program in zebra label
 def fileOpen() :
     labelPath = "label\{}.lbl".format(locknum)
     os.startfile(labelPath)
@@ -32,30 +38,31 @@ def getLastno() :
     f.close
     return lastnum
 
-#sets up a button press with sys modifier commands i.e. 'ctrl + v'
+# sets up a button press with sys modifier commands i.e. 'ctrl + v'
 def mpress(x,y) :
     pyautogui.keyDown(x)
     pyautogui.press(y)
     pyautogui.keyUp(x)
     time.sleep(2)
     return
-
+ #shortens autogui to press()
 def press(x) :
     pyautogui.press(x)
     time.sleep(.5)
     return
+
+#  shortens autogui to rapress()
 def rapress(x) :
     pyautogui.press(x)
     time.sleep(2)
     return
 
+#Function for mouseclick
 def mouseclick():
     pyautogui.click(x=1500, y=540)
 
+# keyboard macro for lower number
 def labelMacro() :
-    keyhold = 0.25
-    
-    # keyboard macro for lower number
     press(['tab','tab'])
     rapress('enter')
     mpress('ctrl','v')
@@ -73,7 +80,7 @@ def barcodeMacro() :
     mpress('alt','f')
     return
 
-# Prints 1000 labels
+# Prints 1000 labels printAmt is set to 1000
 def labelPrint() :
     x = str(printAmt)
     mpress('ctrl','p')
@@ -94,6 +101,10 @@ def updateNum():
     numUpd = lastnum + printAmt
     finalWrite = str(numUpd)
     createFile.write(finalWrite)
+
+
+
+
 
 getLastno()
 fileOpen()
