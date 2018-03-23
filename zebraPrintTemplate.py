@@ -7,6 +7,8 @@ import os
 import pyautogui
 import time
 
+locknum = "E1785000A"
+printAmt = 1000
 
 def addCB(text) :
     command = 'echo ' + text.strip() +'| clip'
@@ -14,18 +16,20 @@ def addCB(text) :
 
 # opens label program
 def fileOpen() :
-    labelPath = "label\E1785000A.lbl"
+    labelPath = "label\{}.lbl".format(locknum)
     os.startfile(labelPath)
     return
 
 #opens txt file and obtains last number used and adds 1 to apply it to clipboard
 def getLastno() :
     global lastnum
-    f = int(open("label\E1785000A.txt","r").read())
-    num = int(f)
+    f = open("label/"+ locknum + ".txt","r")
+    x = f.read()
+    num = int(x)
     lastnum = num + 1
     lncopy = str(lastnum)
     addCB(lncopy)
+    f.close
     return lastnum
 
 #sets up a button press with sys modifier commands i.e. 'ctrl + v'
@@ -45,6 +49,9 @@ def rapress(x) :
     time.sleep(2)
     return
 
+def mouseclick():
+    pyautogui.click(x=1500, y=540)
+
 def labelMacro() :
     keyhold = 0.25
     
@@ -53,39 +60,56 @@ def labelMacro() :
     rapress('enter')
     mpress('ctrl','v')
     mpress('alt','f')
+          
     
     # Keyboard macro for barcode
+def barcodeMacro() :
     mpress('alt','e')
-    i = 1
-    while i > 8 :
-        press('down')
-        i += 1
-    
     press('right')
     press(['down','down'])
     press(['enter','enter'])
-
-    i = 1
-    while i > 7 :
-        press('tab')
-        i += 1
-    
+    press(['tab','tab','tab','tab','tab','tab'])    
     mpress('ctrl','v')
     mpress('alt','f')
     return
 
 # Prints 1000 labels
 def labelPrint() :
+    x = str(printAmt)
     mpress('ctrl','p')
-    pyautogui.typewrite('1000')
+    pyautogui.typewrite(x)
     press('enter')
     time.sleep(30)
-    mpress('alt','f4')
+    
 
+def deleteNum() :
+    dirOne = "label/"+ locknum + ".txt"
+    #dirTwo = "label/bkup/"+ locknum + ".txt"
+    #os.rename(dirOne, dirTwo)
+    os.remove("label\{}.txt".format(locknum))
 
+def updateNum():
+    x = 'label\{}.txt'.format(locknum)
+    createFile = open(x, "w+")
+    numUpd = lastnum + printAmt
+    finalWrite = str(numUpd)
+    createFile.write(finalWrite)
 
 getLastno()
 fileOpen()
-time.sleep(15)
+time.sleep(5)
+
 getLastno()
+mouseclick()
+time.sleep(5)
 labelMacro()
+time.sleep(2)
+mouseclick()
+barcodeMacro()
+time.sleep(2)
+mpress('alt','f4')
+time.sleep(1)
+mpress('alt','n')
+time.sleep(3)
+deleteNum()
+updateNum()
