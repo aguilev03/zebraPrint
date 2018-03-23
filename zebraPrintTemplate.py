@@ -10,14 +10,14 @@ import Pyperclip
 def fileOpen(lockoff) :
     labelPath = "C:\Users\awstech02\Documents\programming\python\zebraPrint\label\E1785000A.lbl"
     os.startfile(labelPath)
-return
+    return
 
 #opens txt file and obtains last number used and adds 1 to apply it to clipboard
 def getLastno(lockoff) :
     f = open("labels\E1785000A.txt","r").read()
     lastnum = f + 1
     pyperclip.copy(lastnum)
-return lastnum
+    return lastnum
 
 #sets up a button press with sys modifier commands i.e. 'ctrl + v'
 def mpress(x,y) :
@@ -25,6 +25,44 @@ def mpress(x,y) :
     pyautogui.press(y)
     pyautogui.keyUp(x)
     return
-    
+
+def press(x) :
+    pyautogui.press(x)
+    return
+
 def labelMacro :
     keyhold = 0.25
+    
+    # keyboard macro for lower number
+    press(['tab','tab'])
+    press('enter')
+    mpress('ctrl','v')
+    mpress('alt','f')
+    
+    # Keyboard macro for barcode
+    mpress('alt','e')
+    i = 1
+    while i > 8 :
+        press('down')
+        i += 1
+    
+    press('right')
+    press(['down','down'])
+    press(['enter','enter'])
+
+    i = 1
+    while i > 7 :
+        press('tab')
+        i += 1
+    
+    mpress('ctrl','v')
+    mpress('alt','f')
+    return
+
+# Prints 1000 labels
+def labelPrint() :
+    mpress('ctrl','p')
+    pyautogui.typewrite('1000')
+    press('enter')
+    time.sleep(30)
+    mpress('alt','f4')
