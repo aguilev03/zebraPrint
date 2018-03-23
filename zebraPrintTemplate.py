@@ -4,19 +4,28 @@
 
 # imports os system command, Pyperclip for clipboard, and pyautogui for keyboard macros
 import os
-import Pyperclip
+import pyautogui
+import time
+
+
+def addCB(text) :
+    command = 'echo ' + text.strip() +'| clip'
+    os.system(command)
 
 # opens label program
-def fileOpen(lockoff) :
-    labelPath = "C:\Users\awstech02\Documents\programming\python\zebraPrint\label\E1785000A.lbl"
+def fileOpen() :
+    labelPath = "label\E1785000A.lbl"
     os.startfile(labelPath)
     return
 
 #opens txt file and obtains last number used and adds 1 to apply it to clipboard
-def getLastno(lockoff) :
-    f = open("labels\E1785000A.txt","r").read()
-    lastnum = f + 1
-    pyperclip.copy(lastnum)
+def getLastno() :
+    global lastnum
+    f = int(open("label\E1785000A.txt","r").read())
+    num = int(f)
+    lastnum = num + 1
+    lncopy = str(lastnum)
+    addCB(lncopy)
     return lastnum
 
 #sets up a button press with sys modifier commands i.e. 'ctrl + v'
@@ -24,18 +33,24 @@ def mpress(x,y) :
     pyautogui.keyDown(x)
     pyautogui.press(y)
     pyautogui.keyUp(x)
+    time.sleep(2)
     return
 
 def press(x) :
     pyautogui.press(x)
+    time.sleep(.5)
+    return
+def rapress(x) :
+    pyautogui.press(x)
+    time.sleep(2)
     return
 
-def labelMacro :
+def labelMacro() :
     keyhold = 0.25
     
     # keyboard macro for lower number
     press(['tab','tab'])
-    press('enter')
+    rapress('enter')
     mpress('ctrl','v')
     mpress('alt','f')
     
@@ -66,3 +81,11 @@ def labelPrint() :
     press('enter')
     time.sleep(30)
     mpress('alt','f4')
+
+
+
+getLastno()
+fileOpen()
+time.sleep(15)
+getLastno()
+labelMacro()
