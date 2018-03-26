@@ -2,34 +2,79 @@
 # which then proceeds to edit the label with the correct values. It will then update the associated txt file
 # with the new last number
 
-# imports os system command, pyautogui for keyboard macros
+# imports os system command, pyautogui for keyboard macros : TKinter for diag box
 import os
 import pyautogui
 import time
+import tkinter as tk
 
-#locknum check
-locknum = ["E1785000A","E1785001A","E1785501A"]
-printAmt = 1000
-#lock number request
-lockReq = input("Please type in the model number")
+#obtain Absolute path to directory
+THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
+#!!! Menu ComboBox
 
+def select() :
+    global locknum
+    locknum = var.get()
+    global printAmt
+    printAmt = varPrint.get()
+    root.quit()
+    
+        
+    
+root = tk.Tk()
+root.geometry("%dx%d+%d+%d" % (330, 80, 200, 150))
+root.title("LockOff Print Labels")
+#!! Menu 1 dropbox
+var = tk.StringVar(root)
+# initial value
+var.set('E1785000A')
 
+# lockoff menu
+choices = ['E1785000A','E1785001A', 'E1785501A']
+option = tk.OptionMenu(root, var, *choices)
+option.pack(side='left', padx=20, pady=10)
 
+#Print Menu
+varPrint = tk.StringVar(root)
+# initial value
+varPrint.set('1000')
+
+printChoices =['100','500','1000']
+printOption = tk.OptionMenu(root,varPrint, *printChoices)
+printOption.pack(side='left', padx=20, pady=10)
+
+#button for OK
+button = tk.Button(root, text="OK", command=select)
+button.pack(side='left', padx=20, pady=10)
+
+root.mainloop()
+# !!! end Menu ComboBOX
+
+# Setup paths to files
+TXT_FILE = locknum + ".txt"
+LBL_FILE = locknum + ".lbl"
+my_file = os.path.join(THIS_FOLDER, TXT_FILE )
+my_label = os.path.join(THIS_FOLDER, LBL_FILE)
+
+printUpdate = int(printAmt)
+
+# This adds clipboard copying to to the program
 def addCB(text) :
     command = 'echo ' + text.strip() +'| clip'
     os.system(command)
 
 # opens label program in zebra label
 def fileOpen() :
-    labelPath = "label\{}.lbl".format(locknum)
-    os.startfile(labelPath)
+
+    os.startfile(my_label)
     return
 
 #opens txt file and obtains last number used and adds 1 to apply it to clipboard
 def getLastno() :
     global lastnum
-    f = open("label/"+ locknum + ".txt","r")
+   
+    f = open(my_file,"r")
     x = f.read()
     num = int(x)
     lastnum = num + 1
@@ -80,25 +125,22 @@ def barcodeMacro() :
     mpress('alt','f')
     return
 
-# Prints 1000 labels printAmt is set to 1000
+# Prints labels printAmt depending on which is selected is set to 1000
 def labelPrint() :
-    x = str(printAmt)
     mpress('ctrl','p')
-    pyautogui.typewrite(x)
+    pyautogui.typewrite(printAmt)
     press('enter')
     time.sleep(30)
     
-
+# Starting the TXT FILE UPDATE SEQUENCE
 def deleteNum() :
-    dirOne = "label/"+ locknum + ".txt"
-    #dirTwo = "label/bkup/"+ locknum + ".txt"
-    #os.rename(dirOne, dirTwo)
-    os.remove("label\{}.txt".format(locknum))
+     os.remove(my_file)
 
 def updateNum():
-    x = 'label\{}.txt'.format(locknum)
+
+    x = my_file
     createFile = open(x, "w+")
-    numUpd = lastnum + printAmt
+    numUpd = lastnum + printUpdate
     finalWrite = str(numUpd)
     createFile.write(finalWrite)
 
