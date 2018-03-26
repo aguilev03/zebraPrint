@@ -1,6 +1,10 @@
+# 3/23/18 Zebra Print Macro
 # This program opens the correct label and obtains the last Lockoff serial number from a txt file
 # which then proceeds to edit the label with the correct values. It will then update the associated txt file
 # with the new last number
+# Developed by Evan Aguilar @ AWS
+
+
 
 # imports os system command, pyautogui for keyboard macros : TKinter for diag box
 import os
@@ -15,7 +19,7 @@ THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
 def select() :
     global locknum
-    locknum = var.get()
+    locknum = varLock.get()
     global printAmt
     printAmt = varPrint.get()
     root.quit()
@@ -26,13 +30,13 @@ root = tk.Tk()
 root.geometry("%dx%d+%d+%d" % (330, 80, 200, 150))
 root.title("LockOff Print Labels")
 #!! Menu 1 dropbox
-var = tk.StringVar(root)
+varLock = tk.StringVar(root)
 # initial value
-var.set('E1785000A')
+varLock.set('E1785000A')
 
 # lockoff menu
 choices = ['E1785000A','E1785001A', 'E1785501A']
-option = tk.OptionMenu(root, var, *choices)
+option = tk.OptionMenu(root, varLock, *choices)
 option.pack(side='left', padx=20, pady=10)
 
 #Print Menu
