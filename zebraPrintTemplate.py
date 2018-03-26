@@ -82,7 +82,8 @@ def getLastno() :
     x = f.read()
     num = int(x)
     lastnum = num + 1
-    lncopy = str(lastnum)
+    print_order = lastnum + printUpdate
+    lncopy = str(print_order)
     addCB(lncopy)
     f.close
     return lastnum
@@ -132,9 +133,11 @@ def barcodeMacro() :
 # Prints labels printAmt depending on which is selected is set to 1000
 def labelPrint() :
     mpress('ctrl','p')
+    time.sleep(2)
+    press('tab')
     pyautogui.typewrite(printAmt)
     press('enter')
-    time.sleep(30)
+    time.sleep(10)
     
 # Starting the TXT FILE UPDATE SEQUENCE
 def deleteNum() :
@@ -155,7 +158,6 @@ def updateNum():
 getLastno()
 fileOpen()
 time.sleep(5)
-
 getLastno()
 mouseclick()
 time.sleep(5)
@@ -164,9 +166,10 @@ time.sleep(2)
 mouseclick()
 barcodeMacro()
 time.sleep(2)
+labelPrint()
 mpress('alt','f4')
 time.sleep(1)
-mpress('alt','n')
+mpress('alt','y')
 time.sleep(3)
 deleteNum()
 updateNum()
