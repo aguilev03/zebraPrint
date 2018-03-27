@@ -44,7 +44,7 @@ varPrint = tk.StringVar(root)
 # initial value
 varPrint.set('1000')
 
-printChoices =['100','500','1000']
+printChoices =['10','50', '100','500','1000']
 printOption = tk.OptionMenu(root,varPrint, *printChoices)
 printOption.pack(side='left', padx=20, pady=10)
 
@@ -109,7 +109,7 @@ def rapress(x) :
 
 #Function for mouseclick
 def mouseclick():
-    pyautogui.click(x=1500, y=540)
+    pyautogui.click(x=1050, y=540)
 
 # keyboard macro for lower number
 def labelMacro() :
@@ -122,7 +122,7 @@ def labelMacro() :
     # Keyboard macro for barcode
 def barcodeMacro() :
     mpress('alt','e')
-    press('right')
+    press('e')
     press(['down','down'])
     press(['enter','enter'])
     press(['tab','tab','tab','tab','tab','tab'])    
